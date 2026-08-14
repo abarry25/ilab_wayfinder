@@ -279,6 +279,9 @@
       <div class="results-header"><span class="results-count" id="stepsLabel">🎯 Start right here</span></div>
       <div class="results-container" id="stepsContainer"></div>
 
+      <div class="results-header"><span class="results-count" id="goalLabel">⭐ What they said success looks like</span></div>
+      <div class="results-container" id="goalContainer"></div>
+
       <div class="results-header"><span class="results-count" id="eventsLabel">📅 Also relevant</span></div>
       <div class="results-container" id="eventsContainer"></div>
 
@@ -294,7 +297,7 @@
 
 <!-- ─────────────────────────────────────────────────────────────
      ilab-data.js loads first — it defines EVENTS, OHS, EXPERTS,
-     PERSONAS, STEPS_DATA, LINKS, getSteps(), getEvents(),
+     PERSONAS, STEPS_DATA, GOALS, GOALS_DATA, LINKS, getSteps(), getEvents(), getGoalPicks(),
      getExperts(), getOHs(), and calcPersonaFromAnswers().
      This tool contains NO hardcoded program data and NO separate
      scoring logic — everything below reads from that file so this
@@ -336,19 +339,25 @@ const SIGNAL_CONFIG = [
     id: 'stage',
     label: 'Q1 — Founder journey stage',
     options: [
-      { value: 'explore', label: '🌱 Explore — has an idea, figuring it out' },
-      { value: 'test',    label: '🧪 Test — validating a specific problem' },
-      { value: 'propel',  label: '🚀 Propel — has traction, building momentum' },
+      { value: 'community', label: '🤝 Here for the people — not building yet' },
+      { value: 'explore',   label: '🌱 Explore — wants to start, no idea yet' },
+      { value: 'validate',  label: '🔍 Validate — has an idea, testing demand' },
+      { value: 'build',     label: '🔨 Build — tested enough, needs to ship it' },
+      { value: 'propel',    label: '🚀 Propel — has traction, building momentum' },
     ]
   },
   {
     id: 'goal',
-    label: 'Q2 — What would make this summer a success?',
+    label: 'Q2 — What would make this semester a success?',
     options: [
-      { value: 'feedback',   label: '🔍 Real customer feedback' },
-      { value: 'milestones', label: '📋 Clear milestones + accountability' },
-      { value: 'community',  label: '🤝 Co-founders / community' },
-      { value: 'funding',    label: '💰 Funding / investor visibility' },
+      { value: 'incubation', label: '📋 Milestones + accountability' },
+      { value: 'funding',    label: '💰 Getting in front of capital' },
+      { value: 'experts',    label: '🧑‍🏫 Experts, entrepreneurs, near peers' },
+      { value: 'frameworks', label: '📐 Frameworks and examples' },
+      { value: 'doing',      label: '🔨 Learning by doing' },
+      { value: 'team',       label: '🧩 Recruiting the right skills' },
+      { value: 'network',    label: '🤝 Co-founders / collaborators / community' },
+      { value: 'validate',   label: '🔍 Real customer feedback' },
     ]
   },
   {
@@ -443,12 +452,13 @@ function updateActiveCount() {
 function getQuickTip() {
   if (state.affiliation === 'alumni')
     return "🏛️ Alumni founders may not be eligible for standard Membership — verify eligibility before recommending the membership intake step below. This check is staff-only; it doesn't affect the founder's persona.";
+  if (state.stage === 'community')
+    return "🤝 They told us they're here for the people, not to build something yet. Community First — and the time answer paces the plan. Everything else at the i-lab stays open to them.";
   if (state.sector === 'socialimpact' && state.stage === 'explore')
-    return "💚 Social Impact only routes to Impact Founder from the Test or Propel stage — SIFF expects traction. At Explore stage they stay an Explorer and pick up impact-tagged events and advisors instead.";
+    return "💚 Social Impact routes to Impact Founder from Validate, Build or Propel — SIFF expects traction. At the Explore stage or Here-for-the-people they keep their own persona and pick up impact-tagged events and advisors instead.";
   if (state.sector === 'socialimpact')
     return "💚 Social Impact at this stage routes to Impact Founder / SIFF — unless they said community is what they want, which wins.";
-  if (state.goal === 'community')
-    return "🤝 They told us people, a team, or inspiration is the goal — that routes to Community First at any stage. Their plan is then paced by the time answer.";
+
   if (state.time === 'light')
     return "⏳ Light time commitment no longer changes the persona. It shapes the plan: fewer steps, lower-commitment formats. Ask what they want out of the semester — that is what routes them.";
   if (!state.sector)
@@ -457,6 +467,8 @@ function getQuickTip() {
     return "🟢 Remote preference filters hard: virtual steps and virtual events only, plus an \"if you do make it to campus\" list. Nothing in their plan requires being here.";
   if (!state.format)
     return "💡 No format preference set — steps and event sorting default to Hybrid, same as the founder quiz's own fallback.";
+  if (state.goal)
+    return "💡 The success answer no longer changes the persona — Q1 does that on its own. It picks which programming they see, in the \"You said success looks like\" panel below.";
   return null;
 }
 
@@ -621,6 +633,15 @@ function renderResults() {
   document.getElementById('stepsContainer').innerHTML =
     steps.length ? steps.map(renderStepCard).join('') : emptySection('No steps configured for this persona/sector in ilab-data.js.');
 
+  const goalMeta  = getGoalMeta(state.goal);
+  const goalPicks = getGoalPicks(personaKey, state.goal, sector, state.format);
+  document.getElementById('goalLabel').textContent =
+    goalMeta ? `${goalMeta.emoji} They said success looks like: ${goalMeta.label.toLowerCase()}`
+             : '⭐ What they said success looks like';
+  document.getElementById('goalContainer').innerHTML = goalPicks.length
+    ? goalPicks.map(renderGoalCard).join('')
+    : emptySection('Nothing configured for this persona and goal in GOALS_DATA.');
+
   document.getElementById('eventsContainer').innerHTML =
     evs.length ? evs.map(renderEventCard).join('') : emptySection('No tagged events for this persona/sector — add tags in the Events tab of the Data Editor.');
 
@@ -629,6 +650,21 @@ function renderResults() {
 
   document.getElementById('ohsContainer').innerHTML =
     ohs.length ? ohs.map(renderOHCard).join('') : emptySection('No tagged office hours for this persona — add tags in the Office Hours tab of the Data Editor.');
+}
+
+// Renders one GOALS_DATA pick. Deliberately delegates to the same card
+// functions the rest of the desk uses, so a goal recommendation and an
+// "also relevant" event look identical to staff.
+function renderGoalCard(r) {
+  if (r.kind === 'note')
+    return `<div class="empty-section" style="background:#FBEDE8;color:#8A3E28">${r.text}</div>`;
+  if (r.kind === 'link')
+    return `<div class="empty-section">Send them the i-lab Slack: <a href="${r.url}" target="_blank">${r.url}</a></div>`;
+  if (r.kind === 'advisors')  return r.items.map(renderExpertCard).join('');
+  if (r.kind === 'events')    return r.items.map(renderEventCard).join('');
+  if (r.kind === 'oh')        return renderOHCard(r.item);
+  if (r.kind === 'event')     return renderEventCard(r.item);
+  return '';
 }
 
 /* ══════════════════════════════════════════════════════════════════════
