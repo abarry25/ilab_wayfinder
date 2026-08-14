@@ -510,6 +510,7 @@ a.link-btn { display: inline-block; }
      This script below only contains quiz logic and rendering.
 ────────────────────────────────────────────────────────────── -->
 <script src="ilab-data.js"></script>
+<script src="analytics.js"></script>
 <script>
 
 // ── FORMAT HELPERS ────────────────────────────────────────────
@@ -565,6 +566,7 @@ function pick(btn) {
 }
 
 function fwd(from, to, step) {
+  if (typeof wfTrackStep === 'function') wfTrackStep(to);
   document.getElementById(from).classList.remove('active');
   document.getElementById(to).classList.add('active');
   setprog(step);
@@ -605,6 +607,8 @@ function runCalc() {
 // ── RENDER RESULTS ────────────────────────────────────────────
 
 function renderResults(personaKey) {
+  window._WF_PERSONA = personaKey;
+  if (typeof wfTrackResult === 'function') wfTrackResult(A, personaKey);
   const sector  = A.q4;
   const format  = A.q5;
   const prefFmt = FMT_MAP[format] || 'HYBRID';
@@ -845,6 +849,22 @@ function renderResults(personaKey) {
   r.style.animation = 'slideup .35s ease both';
   r.style.display = 'block';
 
+  // One delegated listener for the whole results page. Reads the card's
+  // own heading, so it keeps working as cards change.
+  const rEl = document.getElementById('results');
+  if (!rEl.dataset.wfBound) {
+    rEl.dataset.wfBound = '1';
+    rEl.addEventListener('click', function (ev) {
+      const btn = ev.target.closest('.link-btn, .step-cta, a[href]');
+      if (!btn || !rEl.contains(btn)) return;
+      const card = btn.closest('.ev, .oh-cell, .step-card, .rcard');
+      const name = card ? (card.querySelector('.ev-name, .oh-name, .step-action, .sname') || {}).textContent : null;
+      if (typeof wfTrackClick === 'function')
+        wfTrackClick((name || btn.textContent || 'unknown').trim().slice(0, 90),
+                     window._WF_PERSONA, A);
+    });
+  }
+
   document.getElementById('pageWrap').classList.add('wide');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -852,6 +872,7 @@ function renderResults(personaKey) {
 // ── RETAKE ────────────────────────────────────────────────────
 
 function retake() {
+  if (typeof wfTrackRetake === 'function') wfTrackRetake(window._WF_PERSONA);
   // Clear all answers
   Object.keys(A).forEach(k => delete A[k]);
   window._QUIZ_SECTOR = null;
