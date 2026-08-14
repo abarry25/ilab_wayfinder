@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<title>Harvard Innovation Labs — Find Your Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #EBEAE3;
+  --ink: #000;
+  --ink-mid: #444;
+  --ink-light: #888;
+  --ink-faint: #D1D1D1;
+  --rule: #D1D1D1;
+  --amber: #f29138;
+  --amber-light: #f7e4d0;
+  --blue: #4A90C4;
+  --coral: #711213;
+  --green: #84A873;
+  --green-light: #C1F4A8;
+  --teal: #232262;
+  --teal-light: #cbcafa;
+  --purple: #7482E8;
+  --purple-light: #EEEDFE;
+}
+
+body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+
+/* ── NAV ── */
+.top-nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--rule); }
+.top-nav-inner { max-width: 1100px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+.brand { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #888; }
+.nav-r a { margin-left: 20px; text-decoration: none; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.nav-r a:hover { border-bottom-color: var(--blue); }
+.nav-r a.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── HEADER ── */
+header { border-bottom: 1px solid var(--rule); padding: 48px 60px 36px; }
+.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 8px; }
+.page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(28px, 4vw, 42px); color: var(--ink); line-height: 1.15; margin-bottom: 8px; }
+.page-sub { font-size: 14px; color: var(--ink-mid); max-width: 560px; }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; transition: max-width .3s ease; }
+.page-wrap.wide { max-width: 980px; }
+.hidden { display: none !important; }
+
+/* ── PROGRESS ── */
+.prog-track { display: flex; align-items: center; gap: 6px; margin-bottom: 44px; }
+.pbar { height: 3px; flex: 1; background: var(--rule); border-radius: 3px; transition: background .3s; }
+.pbar.done { background: var(--ink); }
+.pbar.cur  { background: #aaa; }
+.plabel { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; padding-left: 10px; }
+
+/* ── QUESTION SCREENS ── */
+.qscreen { display: none; }
+.qscreen.active { display: block; animation: slideup .25s ease both; }
+@keyframes slideup { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+.qnum { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; }
+.qtxt { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 28px; }
+
+/* ── ANSWER BUTTONS ── */
+.alist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+.abtn {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 15px 16px; background: #fff;
+  border: 1px solid var(--rule); border-radius: 12px;
+  cursor: pointer; text-align: left; width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color .12s, box-shadow .12s;
+}
+.abtn:hover { border-color: #aaa; background: #fafaf8; }
+.abtn.sel  { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: #fff; }
+.aem  { font-size: 20px; flex-shrink: 0; line-height: 1.4; margin-top: 2px; }
+.abody { flex: 1; }
+.at { display: block; font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.3; }
+.as { display: block; font-size: 12px; color: var(--ink-light); margin-top: 3px; line-height: 1.4; }
+.radio-ring {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--rule); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .12s; margin-top: 3px; pointer-events: none;
+}
+.abtn.sel .radio-ring { background: var(--ink); border-color: var(--ink); }
+.radio-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+.abtn.sel .radio-dot { display: block; }
+
+/* ── Q NAV ── */
+.qnav { display: flex; align-items: center; justify-content: space-between; }
+.btn-back {
+  padding: 9px 18px; background: none; border: 1px solid var(--rule); border-radius: 20px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--ink-light);
+  cursor: pointer; transition: all .12s;
+}
+.btn-back:hover:not(:disabled) { border-color: #888; color: var(--ink); }
+.btn-back:disabled { opacity: .3; cursor: default; pointer-events: none; }
+.btn-next {
+  padding: 10px 24px; background: var(--ink); color: #fff;
+  border: none; border-radius: 20px; font-size: 13px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s;
+}
+.btn-next:disabled { opacity: .25; cursor: default; }
+.btn-next:not(:disabled):hover { background: #222; }
+.btn-generate {
+  padding: 11px 26px; background: #EA3D3E; color: #fff;
+  border: none; border-radius: 20px; font-size: 13px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background .12s;
+}
+.btn-generate:disabled { opacity: .25; cursor: default; }
+.btn-generate:not(:disabled):hover { background: var(--coral); }
+
+/* ── LOADING ── */
+#loading { display: none; text-align: center; padding: 72px 0; }
+#loading.active { display: block; animation: slideup .2s ease both; }
+.ldots { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
+.ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); animation: dp 1.4s ease-in-out infinite; }
+.ldot:nth-child(2) { animation-delay: .22s; }
+.ldot:nth-child(3) { animation-delay: .44s; }
+@keyframes dp { 0%,60%,100% { background:var(--rule); transform:scale(1); } 30% { background:var(--ink); transform:scale(1.35); } }
+.ltxt { font-size: 14px; color: var(--ink-light); }
+
+/* ── RESULTS ── */
+#results { display: none; }
+
+.pcard {
+  background: #fff; border: 1px solid var(--rule); border-top-width: 3px;
+  border-radius: 14px; padding: 28px; margin-bottom: 16px;
+  position: relative; overflow: hidden;
+}
+.paccent { position: absolute; top: 0; right: 0; width: 120px; height: 120px; border-radius: 0 14px 0 100px; opacity: .12; }
+.pbadge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+.phl { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(22px, 3vw, 30px); color: var(--ink); line-height: 1.2; margin-bottom: 10px; }
+.pdesc { font-size: 14px; color: var(--ink-mid); line-height: 1.65; max-width: 600px; }
+.pformat { margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pformat-label { font-size: 12px; color: var(--ink-light); }
+
+.stack-card { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; }
+.sec-label { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+.stack-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.spill { padding: 8px 14px; border-radius: 8px; }
+.sn { display: block; font-size: 13px; font-weight: 500; }
+.sl { display: block; font-size: 10px; opacity: .65; }
+.sarr { color: var(--ink-faint); font-size: 14px; flex-shrink: 0; }
+
+.rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.rcard { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
+.rc-title { font-size: 12px; font-weight: 500; color: var(--ink); padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
+
+.step { display: flex; gap: 12px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.step-n { width: 22px; height: 22px; border-radius: 50%; background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.step.urg .step-n { background: #EA3D3E; }
+.step-a { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.3; }
+.step-d { font-size: 12px; color: var(--ink-light); line-height: 1.4; }
+.step-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.mismatch-note { font-size: 10px; color: #b45309; font-weight: 500; }
+
+.ev { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.ev:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.ev-tag { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 5px; }
+.ev-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
+.ev-meta { font-size: 11px; color: var(--ink-light); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
+.ev-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.45; margin-bottom: 6px; }
+
+.oh-wrap { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; }
+.oh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.oh-cell { border: 1px solid var(--rule); border-radius: 10px; padding: 14px; }
+.oh-tag   { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; margin-bottom: 7px; }
+.oh-name  { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
+.oh-sched { font-size: 11px; color: var(--ink-light); margin-bottom: 6px; }
+.oh-desc  { font-size: 12px; color: var(--ink-mid); line-height: 1.4; margin-bottom: 8px; }
+
+.link-btn {
+  font-size: 11px; font-weight: 500; color: var(--ink);
+  background: none; border: none; padding: 0; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; text-decoration: underline;
+  text-decoration-color: var(--rule); text-underline-offset: 3px; transition: color .12s;
+}
+.link-btn:hover { color: #EA3D3E; text-decoration-color: #EA3D3E; }
+a.link-btn { display: inline-block; }
+
+.gap-note {
+  border-left: 3px solid var(--amber); background: var(--amber-light);
+  border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 16px;
+  font-size: 13px; color: #6b4226; line-height: 1.5;
+}
+
+.r-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
+.r-btn { padding: 9px 18px; border: 1px solid var(--rule); border-radius: 20px; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; color: var(--ink-mid); background: #fff; text-decoration: none; display: inline-block; transition: all .12s; }
+.r-btn:hover { background: #f5f5f3; border-color: #888; color: var(--ink); }
+.r-btn.acc { color: var(--amber); border-color: var(--amber-light); background: var(--amber-light); }
+.r-btn.acc:hover { background: #e8c89a; }
+
+@media (max-width: 640px) {
+  header { padding: 32px 20px 24px; }
+  .page-wrap { padding: 32px 16px 60px; }
+  .rgrid { grid-template-columns: 1fr; }
+  .oh-grid { grid-template-columns: 1fr; }
+  .stack-row { gap: 6px; }
+}
+</style>
+</head>
+<body>
+
+  <!-- Universal Top Nav -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <span class="brand">i-lab Wayfinder · Fall 2026</span>
+    <div class="nav-r">
+       <a href="the_bot.html">Bot</a>
+           <a href="data-editor.html">Update Data</a>
+      <a href="decision_logic.html">Decision Logic</a>
+      <a href="index.html" class="active">Start Here</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <p class="eyebrow">Harvard Innovation Labs · Fall 2026</p>
+  <h1 class="page-title">Find Your Path</h1>
+  <p class="page-sub">Five questions. A personalized roadmap built from real programs, events, and office hours — matched to exactly where you are right now.</p>
+</header>
+
+<div class="page-wrap" id="pageWrap">
+
+  <div class="prog-track" id="progWrap">
+    <div class="pbar cur" id="pb1"></div>
+    <div class="pbar" id="pb2"></div>
+    <div class="pbar" id="pb3"></div>
+    <div class="pbar" id="pb4"></div>
+    <div class="pbar" id="pb5"></div>
+    <span class="plabel" id="plabel">1 of 5</span>
+  </div>
+
+  <div id="quizqs">
+
+    <!-- Q1: Stage -->
+    <div class="qscreen active" id="q1">
+      <p class="qnum">Question 1 of 5</p>
+      <h2 class="qtxt">Where are you in your founder journey?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="1" data-val="explore" onclick="pick(this)">
+          <span class="aem">🌱</span>
+          <div class="abody">
+            <span class="at">Explore — I have an idea I'm figuring out</span>
+            <span class="as">Still testing whether there's something real here — talking to people, researching the space, or just getting started</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="1" data-val="test" onclick="pick(this)">
+          <span class="aem">🧪</span>
+          <div class="abody">
+            <span class="at">Test — I have a specific problem and I'm validating it</span>
+            <span class="as">Working on customer discovery, building early prototypes, or testing assumptions with real people</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="1" data-val="propel" onclick="pick(this)">
+          <span class="aem">🚀</span>
+          <div class="abody">
+            <span class="at">Propel — I have traction and I'm building momentum</span>
+            <span class="as">Early users, real proof points, or revenue — now focused on growth, fundraising, or the right accelerator</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" disabled>← Back</button>
+        <button class="btn-next" id="n1" disabled onclick="fwd('q1','q2',2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q2: Goal -->
+    <div class="qscreen" id="q2">
+      <p class="qnum">Question 2 of 5</p>
+      <h2 class="qtxt">What would make this summer a success for you?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="2" data-val="feedback" onclick="pick(this)">
+          <span class="aem">🔍</span>
+          <div class="abody">
+            <span class="at">Real customer feedback and validated assumptions</span>
+            <span class="as">Talk to users, test ideas, and know what to build before investing months of effort</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="milestones" onclick="pick(this)">
+          <span class="aem">📋</span>
+          <div class="abody">
+            <span class="at">Clear milestones and real accountability</span>
+            <span class="as">I do best with structure — checkpoints, advisor feedback, and a framework to measure progress</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="community" onclick="pick(this)">
+          <span class="aem">🤝</span>
+          <div class="abody">
+            <span class="at">Co-founders, collaborators, and community</span>
+            <span class="as">Build my network, find the right people, and not feel like I'm doing this alone</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="funding" onclick="pick(this)">
+          <span class="aem">💰</span>
+          <div class="abody">
+            <span class="at">Funding, investors, or pitch visibility</span>
+            <span class="as">Get in front of capital, apply to accelerators, or land on an investor's radar this summer</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q2','q1',1)">← Back</button>
+        <button class="btn-next" id="n2" disabled onclick="fwd('q2','q3',3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q3: Time -->
+    <div class="qscreen" id="q3">
+      <p class="qnum">Question 3 of 5</p>
+      <h2 class="qtxt">How much time can you commit this summer?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="3" data-val="light" onclick="pick(this)">
+          <span class="aem">⚡</span>
+          <div class="abody">
+            <span class="at">A few hours here and there</span>
+            <span class="as">I have classes, a job, or other big commitments — I want to engage when it genuinely fits</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="3" data-val="moderate" onclick="pick(this)">
+          <span class="aem">🗓️</span>
+          <div class="abody">
+            <span class="at">4–10 hours/week, consistently</span>
+            <span class="as">I can show up regularly — want structure and a manageable cadence without full-time intensity</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="3" data-val="heavy" onclick="pick(this)">
+          <span class="aem">🔥</span>
+          <div class="abody">
+            <span class="at">10+ hours — this is my main focus</span>
+            <span class="as">Going all in. I want the most intensive, high-accountability programs the i-lab offers</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q3','q2',2)">← Back</button>
+        <button class="btn-next" id="n3" disabled onclick="fwd('q3','q4',4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q4: Sector -->
+    <div class="qscreen" id="q4">
+      <p class="qnum">Question 4 of 5</p>
+      <h2 class="qtxt">What space are you building in?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="4" data-val="lifesci" onclick="pick(this)">
+          <span class="aem">🧬</span>
+          <div class="abody">
+            <span class="at">Life Sciences / Health Care</span>
+            <span class="as">Biotech, medtech, health services, pharma, or health-adjacent technology</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="climate" onclick="pick(this)">
+          <span class="aem">🌿</span>
+          <div class="abody">
+            <span class="at">Climate / Sustainability</span>
+            <span class="as">Clean energy, climate technology, sustainability, or environmental impact</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="deeptech" onclick="pick(this)">
+          <span class="aem">⚙️</span>
+          <div class="abody">
+            <span class="at">Deep Tech / AI / Engineering</span>
+            <span class="as">Hard tech, AI and machine learning, robotics, or software infrastructure</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="socialimpact" onclick="pick(this)">
+          <span class="aem">💚</span>
+          <div class="abody">
+            <span class="at">Social Impact</span>
+            <span class="as">Mission-driven ventures, nonprofits, social enterprise, or positive social change</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="4" data-val="general" onclick="pick(this)">
+          <span class="aem">🌐</span>
+          <div class="abody">
+            <span class="at">General / Not sure yet</span>
+            <span class="as">Across industries, or still exploring the problem space without a specific sector focus</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q4','q3',3)">← Back</button>
+        <button class="btn-next" id="n4" disabled onclick="fwd('q4','q5',5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Q5: Format -->
+    <div class="qscreen" id="q5">
+      <p class="qnum">Question 5 of 5</p>
+      <h2 class="qtxt">How do you prefer to participate?</h2>
+      <div class="alist">
+        <button class="abtn" data-q="5" data-val="remote" onclick="pick(this)">
+          <span class="aem">🟢</span>
+          <div class="abody">
+            <span class="at">Remote — I work best online</span>
+            <span class="as">I'm not in Cambridge regularly, or I prefer virtual — show me what I can join from anywhere</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="5" data-val="hybrid" onclick="pick(this)">
+          <span class="aem">🟡</span>
+          <div class="abody">
+            <span class="at">Hybrid — I'm open to both</span>
+            <span class="as">I'll show up in person for the right thing, but virtual works too — format doesn't limit me</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="5" data-val="inperson" onclick="pick(this)">
+          <span class="aem">🔵</span>
+          <div class="abody">
+            <span class="at">In-Person — I want to be in the room</span>
+            <span class="as">I'm in Cambridge and face-to-face programs and events are what I'm here for</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+      </div>
+      <div class="qnav">
+        <button class="btn-back" onclick="back('q5','q4',4)">← Back</button>
+        <button class="btn-generate" id="n5" disabled onclick="runCalc()">Generate my journey →</button>
+      </div>
+    </div>
+
+  </div><!-- /quizqs -->
+
+  <div id="loading">
+    <div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>
+    <p class="ltxt">Building your personalized journey…</p>
+  </div>
+
+  <div id="results"></div>
+
+</div><!-- /page-wrap -->
+
+<!-- ─────────────────────────────────────────────────────────────
+     ilab-data.js loads first — it defines EVENTS, OHS, EXPERTS,
+     PERSONAS, STEPS_DATA, LINKS, getSteps(), getEvents(),
+     getExperts(), getOHs()
+     This script below only contains quiz logic and rendering.
+────────────────────────────────────────────────────────────── -->
+<script src="ilab-data.js"></script>
+<script>
+
+// ── FORMAT HELPERS ────────────────────────────────────────────
+
+const FMT_MAP = { remote:'REMOTE', hybrid:'HYBRID', inperson:'INPERSON' };
+
+const FMT_META = {
+  REMOTE:   { icon:'🟢', label:'Remote',    bg:'#dcfce7', tx:'#15803d' },
+  INPERSON: { icon:'🔵', label:'In-Person', bg:'#dbeafe', tx:'#1d4ed8' },
+  HYBRID:   { icon:'🟡', label:'Hybrid',    bg:'#fef3c7', tx:'#b45309' },
+};
+
+function fmtBadge(fmt) {
+  const f = FMT_META[fmt] || { icon:'⚪', label:'TBD', bg:'#f3f4f6', tx:'#6b7280' };
+  return `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:${f.bg};color:${f.tx}">${f.icon} ${f.label}</span>`;
+}
+
+function fmtMismatch(stepFmt, prefFmt) {
+  if (!stepFmt || !prefFmt || prefFmt === 'HYBRID' || stepFmt === prefFmt) return '';
+  const stepLabel = FMT_META[stepFmt] ? FMT_META[stepFmt].label : stepFmt;
+  return `<span class="mismatch-note">⚠️ This program is ${stepLabel}</span>`;
+}
+
+// ── STATE ─────────────────────────────────────────────────────
+
+const A = {};
+
+// ── PERSONA CALCULATION ───────────────────────────────────────
+// Q5 (format) does not affect routing — display only
+// Delegates to calcPersonaFromAnswers() in ilab-data.js, which is
+// the single source of truth for scoring. The Routing Desk
+// (the_bot.html) calls that exact same function, so a staff member
+// and a founder giving identical answers always get the same result.
+
+function calcPersona() {
+  return calcPersonaFromAnswers({
+    stage:  A.q1,
+    goal:   A.q2,
+    time:   A.q3,
+    sector: A.q4,
+  });
+}
+
+// ── QUIZ NAV ──────────────────────────────────────────────────
+
+function pick(btn) {
+  const q = btn.dataset.q;
+  document.querySelectorAll(`.abtn[data-q="${q}"]`).forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  A[`q${q}`] = btn.dataset.val;
+  const nb = document.getElementById(`n${q}`);
+  if (nb) nb.disabled = false;
+}
+
+function fwd(from, to, step) {
+  document.getElementById(from).classList.remove('active');
+  document.getElementById(to).classList.add('active');
+  setprog(step);
+}
+
+function back(from, to, step) {
+  document.getElementById(from).classList.remove('active');
+  document.getElementById(to).classList.add('active');
+  setprog(step);
+}
+
+function setprog(step) {
+  ['pb1','pb2','pb3','pb4','pb5'].forEach((id, i) => {
+    document.getElementById(id).className = 'pbar' +
+      (i+1 < step ? ' done' : i+1 === step ? ' cur' : '');
+  });
+  document.getElementById('plabel').textContent = step + ' of 5';
+}
+
+function runCalc() {
+  // ⚠️ Must set sector on window BEFORE calling getSteps()
+  // getSteps() in ilab-data.js reads window._QUIZ_SECTOR internally
+  window._QUIZ_SECTOR = A.q4;
+  // getSteps also reads these: time shapes the plan, format filters it.
+  window._QUIZ_TIME   = A.q3;
+  window._QUIZ_FORMAT = A.q5;
+
+  document.getElementById('q5').classList.remove('active');
+  document.getElementById('loading').classList.add('active');
+  ['pb1','pb2','pb3','pb4','pb5'].forEach(id =>
+    document.getElementById(id).className = 'pbar done'
+  );
+  document.getElementById('plabel').textContent = 'Complete ✓';
+
+  setTimeout(() => renderResults(calcPersona()), 1500);
+}
+
+// ── RENDER RESULTS ────────────────────────────────────────────
+
+function renderResults(personaKey) {
+  const sector  = A.q4;
+  const format  = A.q5;
+  const prefFmt = FMT_MAP[format] || 'HYBRID';
+
+  // Pull data from ilab-data.js
+  const p       = PERSONAS[personaKey];
+  const steps   = getSteps(personaKey);              // reads window._QUIZ_SECTOR internally
+  const evs     = getEvents(personaKey, sector, format);
+  const ohs     = getOHs(personaKey, sector, steps);
+  const experts = getExperts(personaKey, sector);
+  const commPicks = getCommunityPicks(personaKey, sector, format);
+  const inPerson  = (format === 'remote') ? getInPersonExtras(personaKey, sector) : [];
+
+  // ── Persona stack ──────────────────────────────
+  const stackHtml = p.stack.map((s, i) => `
+    <div class="spill" style="background:${s.bg};color:${s.tx}">
+      <span class="sn">${s.n}</span>
+      <span class="sl">${s.l}</span>
+    </div>
+    ${i < p.stack.length - 1 ? '<span class="sarr">→</span>' : ''}
+  `).join('');
+
+  // ── 3 Steps — left column ──────────────────────
+  const stepsHtml = steps.length
+    ? steps.map((s, i) => `
+        <div class="step${s.u ? ' urg' : ''}">
+          <div class="step-n">${i + 1}</div>
+          <div style="flex:1;">
+            <span class="step-a">${s.a}</span>
+            <span class="step-d">${s.d}</span>
+            <div class="step-foot">
+              ${s.fmt ? fmtBadge(s.fmt) : ''}
+              ${s.ll && s.link
+                ? `<a href="${s.link}" target="_blank" class="link-btn">${s.ll}</a>`
+                : ''}
+              ${fmtMismatch(s.fmt, prefFmt)}
+            </div>
+          </div>
+        </div>`).join('')
+    : '<p style="font-size:13px;color:var(--ink-light);">Steps coming soon.</p>';
+
+  // ── Events — right column ──────────────────────
+  const evsHtml = evs.length
+    ? evs.map(e => {
+        const mismatch = (e.format !== prefFmt && prefFmt !== 'HYBRID')
+          ? `<span style="font-size:10px;color:#b45309;font-weight:500;">
+               ⚠️ ${FMT_META[e.format]?.label || e.format}
+             </span>`
+          : '';
+        return `
+          <div class="ev">
+            <span class="ev-tag" style="background:${e.cbg};color:${e.ctx}">${e.con}</span>
+            <div class="ev-name">${e.name}</div>
+            <div class="ev-meta">
+              <span>📅 ${e.date}${e.time ? ' · ' + e.time : ''}</span>
+              ${fmtBadge(e.format)}
+              ${mismatch}
+            </div>
+            <div class="ev-desc">${e.desc}</div>
+            <button class="link-btn">Register →</button>
+          </div>`;
+      }).join('')
+    : '<p style="font-size:13px;color:var(--ink-light);">Check back — more events being added.</p>';
+
+  // ── Office hours — bottom grid ─────────────────
+  const ohsHtml = ohs.map(o => `
+    <div class="oh-cell">
+      <span class="oh-tag" style="background:${o.cbg};color:${o.ctx}">${o.con}</span>
+      <div class="oh-name">${o.name}</div>
+      <div class="oh-sched">${o.sched} · ${o.fmt}</div>
+      <div class="oh-desc">${o.desc}</div>
+      <button class="link-btn">${o.cta} →</button>
+    </div>`).join('');
+
+  // ── Expert advisors — own section, above office hours ──────
+  // NOTE: EXPERTS objects (from ilab-data.js / data-editor.html)
+  // have { name, role, org, photo, bookingUrl, canHelp, tags } —
+  // NOT con/cbg/ctx/title/bio/link/cta. Use the real fields.
+  const expertsHtml = experts.map(x => `
+    <div class="oh-cell">
+      <span class="oh-tag" style="background:#EEEDFE;color:#232262">Advisor</span>
+      <div class="oh-name">${x.name}</div>
+      <div class="oh-sched">${[x.role, x.org].filter(Boolean).join(' · ')}</div>
+      <div class="oh-desc">${x.canHelp || ''}</div>
+      ${x.bookingUrl ? `<a href="${x.bookingUrl}" target="_blank" class="link-btn">Book a session →</a>` : ''}
+    </div>`).join('');
+
+  // ── Community — everyone gets these, whatever their persona ────
+  const commHtml = commPicks.map(e => `
+    <div class="oh-cell">
+      <span class="oh-tag" style="background:${e.cbg};color:${e.ctx}">${e.con}</span>
+      <div class="oh-name">${e.name}</div>
+      <div class="oh-sched">${e.date}${e.time ? ' · ' + e.time : ''} · ${FMT_META[e.format]?.label || e.format}</div>
+      <div class="oh-desc">${e.desc}</div>
+      <button class="link-btn">Register →</button>
+    </div>`).join('');
+
+  // ── If you do come in — only for remote-preference founders ────
+  const inPersonHtml = inPerson.length ? `
+    <div class="oh-wrap">
+      <p class="sec-label">🔵 If you do make it to campus</p>
+      <p style="font-size:13px;color:var(--ink-light);margin:-4px 0 12px;">
+        Everything above runs remotely, so you can do the whole thing from wherever you are.
+        These three are worth the trip if you are ever in Cambridge — no pressure, and nothing
+        above depends on them.
+      </p>
+      <div class="oh-grid">${inPerson.map(e => `
+        <div class="oh-cell">
+          <span class="oh-tag" style="background:${e.cbg};color:${e.ctx}">${e.con}</span>
+          <div class="oh-name">${e.name}</div>
+          <div class="oh-sched">${e.date}${e.time ? ' · ' + e.time : ''} · In person</div>
+          <div class="oh-desc">${e.desc}</div>
+        </div>`).join('')}</div>
+    </div>` : '';
+
+  // ── Gap note — shown for sectors with no specific programming ──
+  const gapNote = (sector === 'climate')
+    ? `<div class="gap-note">
+         ⚠️ No Climate-specific programming this semester — you're matched to the
+         strongest available path. A dedicated Climate track is in development.
+       </div>`
+    : '';
+
+  // ── Assemble results page ──────────────────────
+  document.getElementById('results').innerHTML = `
+
+    <div class="pcard" style="border-top-color:${p.ac}">
+      <div class="paccent" style="background:${p.ac}"></div>
+      <div class="pbadge" style="background:${p.bb};color:${p.bt}">${p.emoji} ${p.name}</div>
+      <h2 class="phl">${p.hl}</h2>
+      <p class="pdesc">${p.desc}</p>
+      <div class="pformat">
+        <span class="pformat-label">Format preference:</span>
+        ${fmtBadge(prefFmt)}
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <p class="sec-label">Your recommended journey</p>
+      <div class="stack-row">${stackHtml}</div>
+    </div>
+
+    ${gapNote}
+
+    <div class="rgrid">
+      <div class="rcard">
+        <div class="rc-title">🎯 Start right here</div>
+        ${stepsHtml}
+      </div>
+      <div class="rcard">
+        <div class="rc-title">📅 Also for you</div>
+        ${evsHtml}
+      </div>
+    </div>
+
+    ${experts.length ? `
+      <div class="oh-wrap">
+        <p class="sec-label">🧑‍🏫 Advisors for you</p>
+        <div class="oh-grid">${expertsHtml}</div>
+      </div>` : ''}
+
+    ${ohs.length ? `
+      <div class="oh-wrap">
+        <p class="sec-label">🕐 Office hours for you</p>
+        <div class="oh-grid">${ohsHtml}</div>
+      </div>` : ''}
+
+    ${commPicks.length ? `
+      <div class="oh-wrap">
+        <p class="sec-label">🤝 Community — open to you whatever you are working on</p>
+        <div class="oh-grid">${commHtml}</div>
+      </div>` : ''}
+
+    ${inPersonHtml}
+
+    <div class="r-footer">
+      <button class="r-btn" onclick="retake()">← Retake quiz</button>
+    </div>
+  `;
+
+  // ── Transition: hide quiz, reveal results ──────
+  document.getElementById('loading').classList.remove('active');
+  document.getElementById('quizqs').classList.add('hidden');
+  document.getElementById('progWrap').classList.add('hidden');
+
+  const r = document.getElementById('results');
+  r.style.animation = 'none';
+  void r.offsetHeight; // force reflow to re-trigger animation
+  r.style.animation = 'slideup .35s ease both';
+  r.style.display = 'block';
+
+  document.getElementById('pageWrap').classList.add('wide');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── RETAKE ────────────────────────────────────────────────────
+
+function retake() {
+  // Clear all answers
+  Object.keys(A).forEach(k => delete A[k]);
+  window._QUIZ_SECTOR = null;
+  window._QUIZ_TIME   = null;
+  window._QUIZ_FORMAT = null;
+
+  // Reset question screens
+  document.querySelectorAll('.qscreen').forEach(s => s.classList.remove('active'));
+  document.getElementById('q1').classList.add('active');
+
+  // Reset selections
+  document.querySelectorAll('.abtn').forEach(b => b.classList.remove('sel'));
+
+  // Reset next/generate buttons
+  ['n1','n2','n3','n4','n5'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = true;
+  });
+
+  // Reset loading state
+  document.getElementById('loading').classList.remove('active');
+
+  // Reset progress bar
+  setprog(1);
+
+  // Show quiz, hide results
+  document.getElementById('quizqs').classList.remove('hidden');
+  document.getElementById('progWrap').classList.remove('hidden');
+  const r = document.getElementById('results');
+  r.style.display = 'none';
+  r.innerHTML = '';
+
+  document.getElementById('pageWrap').classList.remove('wide');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+</script>
+</body>
+</html>
