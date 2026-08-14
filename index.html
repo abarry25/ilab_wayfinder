@@ -245,27 +245,43 @@ a.link-btn { display: inline-block; }
       <p class="qnum">Question 1 of 5</p>
       <h2 class="qtxt">Where are you in your founder journey?</h2>
       <div class="alist">
-        <button class="abtn" data-q="1" data-val="explore" onclick="pick(this)">
-          <span class="aem">🌱</span>
+        <button class="abtn" data-q="1" data-val="community" onclick="pick(this)">
+          <span class="aem">🤝</span>
           <div class="abody">
-            <span class="at">I have an idea I'm figuring out</span>
-            <span class="as">Still testing whether there's something real here — talking to people, researching the space, or just getting started</span>
+            <span class="at">I&rsquo;m here for the people</span>
+            <span class="as">I want to be around founders and see what&rsquo;s happening. Not building something yet, or not right now.</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
-        <button class="abtn" data-q="1" data-val="test" onclick="pick(this)">
-          <span class="aem">🧪</span>
+        <button class="abtn" data-q="1" data-val="explore" onclick="pick(this)">
+          <span class="aem">🌱</span>
           <div class="abody">
-            <span class="at">I have a specific problem and I'm validating it</span>
-            <span class="as">Working on customer discovery, building early prototypes, or testing assumptions with real people</span>
+            <span class="at">I want to start something &mdash; I just don&rsquo;t have the idea yet</span>
+            <span class="as">I know I want to build. I&rsquo;m still working out what.</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="1" data-val="validate" onclick="pick(this)">
+          <span class="aem">🔍</span>
+          <div class="abody">
+            <span class="at">I have an idea and need to know if anyone wants it</span>
+            <span class="as">Talking to people, testing assumptions, figuring out whether the problem is real.</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="1" data-val="build" onclick="pick(this)">
+          <span class="aem">🔨</span>
+          <div class="abody">
+            <span class="at">I&rsquo;ve tested enough &mdash; now I need to build it</span>
+            <span class="as">Ready to put something in front of real users.</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
         <button class="abtn" data-q="1" data-val="propel" onclick="pick(this)">
           <span class="aem">🚀</span>
           <div class="abody">
-            <span class="at">I have traction and I'm building momentum</span>
-            <span class="as">Early users, real proof points, or revenue — now focused on growth, fundraising, or the right accelerator</span>
+            <span class="at">I have traction and I&rsquo;m building momentum</span>
+            <span class="as">Early users, proof points or revenue. Focused on growth, fundraising or an accelerator.</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
@@ -281,35 +297,67 @@ a.link-btn { display: inline-block; }
       <p class="qnum">Question 2 of 5</p>
       <h2 class="qtxt">What would make this semester a success for you?</h2>
       <div class="alist">
-        <button class="abtn" data-q="2" data-val="feedback" onclick="pick(this)">
-          <span class="aem">🔍</span>
-          <div class="abody">
-            <span class="at">Real customer feedback and validated assumptions</span>
-            <span class="as">Talk to users, test ideas, and know what to build before investing months of effort</span>
-          </div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="milestones" onclick="pick(this)">
+        <button class="abtn" data-q="2" data-val="incubation" onclick="pick(this)">
           <span class="aem">📋</span>
           <div class="abody">
             <span class="at">Clear milestones and real accountability</span>
-            <span class="as">I do best with structure — checkpoints, advisor feedback, and a framework to measure progress</span>
-          </div>
-          <div class="radio-ring"><div class="radio-dot"></div></div>
-        </button>
-        <button class="abtn" data-q="2" data-val="community" onclick="pick(this)">
-          <span class="aem">🤝</span>
-          <div class="abody">
-            <span class="at">Co-founders, collaborators, and community</span>
-            <span class="as">Build my network, find the right people, and not feel like I'm doing this alone</span>
+            <span class="as">I do best with structure &mdash; checkpoints, advisor feedback, a way to measure progress</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
         <button class="abtn" data-q="2" data-val="funding" onclick="pick(this)">
           <span class="aem">💰</span>
           <div class="abody">
-            <span class="at">Funding, investors, or pitch visibility</span>
-            <span class="as">Get in front of capital, apply to accelerators, or land on an investor's radar this summer</span>
+            <span class="at">Getting in front of capital</span>
+            <span class="as">Apply for funding, land on an investor&rsquo;s radar, or find out what I&rsquo;d need to be ready</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="experts" onclick="pick(this)">
+          <span class="aem">🧑&zwj;🏫</span>
+          <div class="abody">
+            <span class="at">Talking to industry experts, seasoned entrepreneurs, and near peers</span>
+            <span class="as">People who have done this before, and people doing it alongside me right now</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="frameworks" onclick="pick(this)">
+          <span class="aem">📐</span>
+          <div class="abody">
+            <span class="at">Concrete frameworks and examples to learn from</span>
+            <span class="as">Show me how this is actually done before I go do it</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="doing" onclick="pick(this)">
+          <span class="aem">🔨</span>
+          <div class="abody">
+            <span class="at">Learning by doing</span>
+            <span class="as">I&rsquo;d rather build something rough this week than read about it for a month</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="team" onclick="pick(this)">
+          <span class="aem">🧩</span>
+          <div class="abody">
+            <span class="at">Recruiting people with the right skills to make this real</span>
+            <span class="as">I need co-founders or collaborators who can do what I can&rsquo;t</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="network" onclick="pick(this)">
+          <span class="aem">🤝</span>
+          <div class="abody">
+            <span class="at">Co-founders, collaborators, and community</span>
+            <span class="as">Build my network, find my people, and not feel like I&rsquo;m doing this alone</span>
+          </div>
+          <div class="radio-ring"><div class="radio-dot"></div></div>
+        </button>
+        <button class="abtn" data-q="2" data-val="validate" onclick="pick(this)">
+          <span class="aem">🔍</span>
+          <div class="abody">
+            <span class="at">Real customer feedback</span>
+            <span class="as">Talk to users, test assumptions, and know what to build before investing months</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
@@ -344,8 +392,8 @@ a.link-btn { display: inline-block; }
         <button class="abtn" data-q="3" data-val="heavy" onclick="pick(this)">
           <span class="aem">🔥</span>
           <div class="abody">
-            <span class="at">10+ hours</span>
-            <span class="as">I want the most intensive, high-accountability programs the i-lab offers</span>
+            <span class="at">10+ hours — this is my main focus</span>
+            <span class="as">Going all in. I want the most intensive, high-accountability programs the i-lab offers</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
@@ -359,7 +407,7 @@ a.link-btn { display: inline-block; }
     <!-- Q4: Sector -->
     <div class="qscreen" id="q4">
       <p class="qnum">Question 4 of 5</p>
-      <h2 class="qtxt">What space are you interested in?</h2>
+      <h2 class="qtxt">What space are you building in?</h2>
       <div class="alist">
         <button class="abtn" data-q="4" data-val="lifesci" onclick="pick(this)">
           <span class="aem">🧬</span>
@@ -433,7 +481,7 @@ a.link-btn { display: inline-block; }
           <span class="aem">🔵</span>
           <div class="abody">
             <span class="at">In-Person — I want to be in the room</span>
-            <span class="as">I'm on campus and face-to-face programs and events are what I'm here for</span>
+            <span class="as">I'm in Cambridge and face-to-face programs and events are what I'm here for</span>
           </div>
           <div class="radio-ring"><div class="radio-dot"></div></div>
         </button>
@@ -568,6 +616,8 @@ function renderResults(personaKey) {
   const ohs     = getOHs(personaKey, sector, steps);
   const experts = getExperts(personaKey, sector);
   const commPicks = getCommunityPicks(personaKey, sector, format);
+  const goalMeta  = getGoalMeta(A.q2);
+  const goalPicks = getGoalPicks(personaKey, A.q2, sector, format);
   const inPerson  = (format === 'remote') ? getInPersonExtras(personaKey, sector) : [];
 
   // ── Persona stack ──────────────────────────────
@@ -644,6 +694,46 @@ function renderResults(personaKey) {
       ${x.bookingUrl ? `<a href="${x.bookingUrl}" target="_blank" class="link-btn">Book a session →</a>` : ''}
     </div>`).join('');
 
+  // ── What they asked for — the Q2 answer, answered ──────────────
+  const goalCard = (r) => {
+    if (r.kind === 'note')
+      return `<div class="oh-cell" style="grid-column:1/-1;background:#FBEDE8;border-color:#E9D3CA">
+                <div class="oh-desc" style="color:#8A3E28;font-size:13px">${r.text}</div></div>`;
+    if (r.kind === 'link')
+      return `<div class="oh-cell"><span class="oh-tag" style="background:#FFC7C8;color:#711213">Community</span>
+                <div class="oh-name">Join the i-lab Slack</div>
+                <div class="oh-desc">See what teams are working on, and ask questions in the open.</div>
+                <a href="${r.url}" class="link-btn">Join &rarr;</a></div>`;
+    if (r.kind === 'advisors')
+      return r.items.map(x => `<div class="oh-cell">
+                <span class="oh-tag" style="background:#EEEDFE;color:#232262">Advisor</span>
+                <div class="oh-name">${x.name}</div>
+                <div class="oh-sched">${[x.role, x.org].filter(Boolean).join(' \u00b7 ')}</div>
+                <div class="oh-desc">${x.canHelp || ''}</div>
+                ${x.bookingUrl ? `<a href="${x.bookingUrl}" target="_blank" class="link-btn">Book a session &rarr;</a>` : ''}
+              </div>`).join('');
+    if (r.kind === 'oh') {
+      const o = r.item;
+      return `<div class="oh-cell"><span class="oh-tag" style="background:${o.cbg};color:${o.ctx}">${o.con}</span>
+                <div class="oh-name">${o.name}</div>
+                <div class="oh-sched">${o.sched} \u00b7 ${o.fmt}</div>
+                <div class="oh-desc">${o.desc}</div>
+                <button class="link-btn">${o.cta} &rarr;</button></div>`;
+    }
+    const list = r.kind === 'events' ? r.items : [r.item];
+    return list.map(e => `<div class="oh-cell">
+              <span class="oh-tag" style="background:${e.cbg};color:${e.ctx}">${e.con}</span>
+              <div class="oh-name">${e.name}</div>
+              <div class="oh-sched">${e.date}${e.time ? ' \u00b7 ' + e.time : ''} \u00b7 ${FMT_META[e.format]?.label || e.format}${r.offFormat ? ' \u00b7 <span style="color:#b45309;font-weight:600">on campus</span>' : ''}</div>
+              <div class="oh-desc">${e.desc}</div>
+              <button class="link-btn">Register &rarr;</button></div>`).join('');
+  };
+  const goalHtml = goalPicks.length ? `
+    <div class="oh-wrap">
+      <p class="sec-label">${goalMeta ? goalMeta.emoji : '\u2b50'} You said success looks like: ${goalMeta ? goalMeta.label.toLowerCase() : 'this'}</p>
+      <div class="oh-grid">${goalPicks.map(goalCard).join('')}</div>
+    </div>` : '';
+
   // ── Community — everyone gets these, whatever their persona ────
   const commHtml = commPicks.map(e => `
     <div class="oh-cell">
@@ -655,13 +745,18 @@ function renderResults(personaKey) {
     </div>`).join('');
 
   // ── If you do come in — only for remote-preference founders ────
+  const anyOnCampus = goalPicks.some(r => r.offFormat);
   const inPersonHtml = inPerson.length ? `
     <div class="oh-wrap">
       <p class="sec-label">🔵 If you do make it to campus</p>
       <p style="font-size:13px;color:var(--ink-light);margin:-4px 0 12px;">
-        Everything above runs remotely, so you can do the whole thing from wherever you are.
-        These three are worth the trip if you are ever in Cambridge — no pressure, and nothing
-        above depends on them.
+        ${anyOnCampus
+          ? `Your plan above is all remote. A few of the recommendations are marked
+             <span style="color:#b45309;font-weight:600">on campus</span> &mdash; those are the ones
+             that need you here. Everything else you can do from wherever you are.`
+          : `Your whole plan runs remotely, so you can do all of it from wherever you are.`}
+        These are worth the trip if you are ever in Cambridge &mdash; no pressure, and nothing
+        in your plan depends on them.
       </p>
       <div class="oh-grid">${inPerson.map(e => `
         <div class="oh-cell">
@@ -723,6 +818,8 @@ function renderResults(personaKey) {
         <p class="sec-label">🕐 Office hours for you</p>
         <div class="oh-grid">${ohsHtml}</div>
       </div>` : ''}
+
+    ${goalHtml}
 
     ${commPicks.length ? `
       <div class="oh-wrap">
