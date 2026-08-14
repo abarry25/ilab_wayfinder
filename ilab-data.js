@@ -46,6 +46,7 @@ const LINKS = {
   CLIMATE_DEMAND:            "#",
   MARKETING_HCLS:            "#",
   GONG_A_THON:               "#",
+  SLACK:                     "#",
 };
 
 const EVENTS = [
@@ -117,7 +118,7 @@ const EVENTS = [
   { id:"how_to_start_your_venture", active:true, name:"How to Start Your Venture",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
     date:"Oct 1", time:"4:00 PM", format:"INPERSON",
-    tags:["explorer", "validator"], desc:"Turn your venture idea into action! Learn a simple six-step framework to validate, refine, and launch your startup idea. ??",
+    tags:["explorer", "validator"], desc:"Turn your venture idea into action! Learn a simple six-step framework to validate, refine, and launch your startup idea.",
     link:"" },
   { id:"sundai_hackathon_3", active:true, name:"Sundai Hackathon",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
@@ -177,7 +178,7 @@ const EVENTS = [
   { id:"build_your_mvp_1_without_an", active:true, name:"Build Your MVP 1: Without an Engineer",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
     date:"Oct 14", time:"4:00 PM", format:"INPERSON",
-    tags:["validator", "builder"], desc:"No coding? No problem. Learn how to use no-code tools to build an MVP and test your idea with real customers. ??",
+    tags:["validator", "builder"], desc:"No coding? No problem. Learn how to use no-code tools to build an MVP and test your idea with real customers.",
     link:"" },
   { id:"ingenuity_award_application", active:true, name:"Ingenuity Award Application Fall Round",
     con:"Venture Growth", cbg:"#cbcafa", ctx:"#232262",
@@ -192,7 +193,7 @@ const EVENTS = [
   { id:"b2c_hackathon_concept_testin", active:true, name:"B2C Hackathon: Concept Testing with AI Pt1",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
     date:"Oct 15", time:"4:00 PM", format:"INPERSON",
-    tags:["validator", "builder"], desc:"Leverage AI to generate, research, prototype, and validate a business idea to disrupt the consumer market! ??",
+    tags:["validator", "builder"], desc:"Leverage AI to generate, research, prototype, and validate a business idea to disrupt the consumer market!",
     link:"" },
   { id:"demand_for_climate_resilienc", active:true, name:"Demand for Climate Resilience",
     con:"Venture Growth", cbg:"#cbcafa", ctx:"#232262",
@@ -207,7 +208,7 @@ const EVENTS = [
   { id:"b2c_hackathon_concept_testin_2", active:true, name:"B2C Hackathon: Concept Testing with AI Pt2",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
     date:"Oct 20", time:"4:00 PM", format:"REMOTE",
-    tags:["validator", "builder"], desc:"Leverage AI to generate, research, prototype, and validate a business idea to disrupt the consumer market! ??",
+    tags:["validator", "builder"], desc:"Leverage AI to generate, research, prototype, and validate a business idea to disrupt the consumer market!",
     link:"" },
   { id:"getting_to_product_market_fi", active:true, name:"Getting to Product-Market Fit (B2B sales)",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
@@ -621,6 +622,12 @@ const EXPERTS = [
 // stepLinks: optional — promotes this office hour to the top of the
 // grid whenever the founder is seeing that exact persona/sector/step.
 // Fall 2026: recurring drop-in and clinic series, collapsed from the calendar.
+
+// ── OFFICE HOURS ──────────────────────────────────────────────────
+// sectorTags: ['all'] shows for every sector within a matching persona.
+// stepLinks: optional — promotes this office hour to the top of the
+// grid whenever the founder is seeing that exact persona/sector/step.
+// Fall 2026: recurring drop-in and clinic series, collapsed from the calendar.
 const OHS = [
   { id:"explorer_ooh", active:true, name:"Explorers Group Office Hours",
     con:"Founder Fundamentals", cbg:"#C1F4A8", ctx:"#27500A",
@@ -771,6 +778,122 @@ const PERSONAS = {
 
 };
 
+// ── GOALS ──────────────────────────────────────────────────────────
+// Q2, "What would make this semester a success?" — eight options.
+// The goal does NOT pick the persona (Q1 does). It picks which
+// programming that persona is shown. Edit the copy here; edit the
+// recommendations in GOALS_DATA below.
+const GOALS = [
+  { key:"incubation", emoji:"📋", label:"Clear milestones and real accountability",
+    sub:"I do best with structure — checkpoints, advisor feedback, a way to measure progress" },
+  { key:"funding", emoji:"💰", label:"Getting in front of capital",
+    sub:"Apply for funding, land on an investor's radar, or find out what I'd need to be ready" },
+  { key:"experts", emoji:"🧑‍🏫", label:"Talking to industry experts, seasoned entrepreneurs, and near peers",
+    sub:"People who have done this before, and people doing it alongside me right now" },
+  { key:"frameworks", emoji:"📐", label:"Concrete frameworks and examples to learn from",
+    sub:"Show me how this is actually done before I go do it" },
+  { key:"doing", emoji:"🔨", label:"Learning by doing",
+    sub:"I'd rather build something rough this week than read about it for a month" },
+  { key:"team", emoji:"🧩", label:"Recruiting people with the right skills to make this real",
+    sub:"I need co-founders or collaborators who can do what I can't" },
+  { key:"network", emoji:"🤝", label:"Co-founders, collaborators, and community",
+    sub:"Build my network, find my people, and not feel like I'm doing this alone" },
+  { key:"validate", emoji:"🔍", label:"Real customer feedback",
+    sub:"Talk to users, test assumptions, and know what to build before investing months" },
+];
+
+// ── GOALS_DATA ─────────────────────────────────────────────────────
+// persona → goal → what we recommend. Rows resolve in order.
+//   ev    an EVENTS id
+//   oh    an OHS id
+//   adv   advisors, by tag: general | socialimpact | climate
+//   link  a LINKS key
+//   note  plain text, for when the honest answer is "not yet"
+// An optional `sector` on a row makes it sector-specific; rows without
+// one are the default. Used for the funding split (social impact → SIFF).
+const GOALS_DATA = {
+
+  community: {
+    incubation: [{ link:"SLACK" }, { note:"Watch what teams are working on. When you want that structure for yourself, come back and retake this." }],
+    funding:    [{ ev:"ingenuity_award_application" }, { note:"The Ingenuity Award is the one funding route that does not need a formed venture — but it does need an idea. If you have not picked one yet, start there and come back." }],
+    experts:    [{ oh:"explorer_ooh" }, { adv:"general" }],
+    frameworks: [{ ev:"how_to_start_your_venture" }],
+    doing:      [{ ev:"how_to_start_your_venture" }, { ev:"sundai_hackathon_2" }],
+    team:       [{ ev:"oct_pizza_and_pitch_oct_13th" }, { ev:"pizza_pitch" }],
+    network:    [{ community:true }],
+    validate:   [{ ev:"customer_discovery_101_b2b_b" }, { ev:"how_to_start_your_venture" }],
+  },
+
+  explorer: {
+    incubation: [{ oh:"explorer_ooh" }],
+    funding:    [{ ev:"ingenuity_award_application" }, { ev:"how_to_start_your_venture" }],
+    experts:    [{ oh:"explorer_ooh" }, { adv:"general" }],
+    frameworks: [{ ev:"how_to_start_your_venture" }],
+    doing:      [{ ev:"ideation_workshop_sprint" }, { ev:"how_to_start_your_venture" }],
+    team:       [{ ev:"oct_pizza_and_pitch_oct_13th" }, { ev:"pizza_pitch" }],
+    network:    [{ community:true }],
+    validate:   [{ ev:"customer_discovery_email_jou" }, { ev:"customer_discovery_101_b2b_b" }, { ev:"how_to_start_your_venture" }],
+  },
+
+  validator: {
+    incubation: [{ ev:"hipo_application_round" }, { ev:"hipo_application_round_2" }, { ev:"hipo_application_round_3" }],
+    funding:    [{ ev:"ingenuity_award_application" }, { ev:"hipo_application_round_2" }, { note:"Ingenuity is non-dilutive and open now. HiPo is stage-gated rather than a cohort clock, so you advance when the evidence is ready." }],
+    experts:    [{ oh:"cd_clinics" }, { adv:"general" }],
+    frameworks: [{ ev:"customer_discovery_101_b2b_b" }, { ev:"customer_discovery_virtual_w" }, { ev:"how_to_start_your_venture" }],
+    doing:      [{ ev:"b2c_hackathon_concept_testin" }, { ev:"b2c_hackathon_concept_testin_2" }],
+    team:       [{ ev:"oct_pizza_and_pitch_oct_13th" }, { ev:"pizza_pitch" }],
+    network:    [{ community:true }],
+    validate:   [{ ev:"customer_discovery_email_jou" }, { ev:"customer_discovery_101_b2b_b" }, { oh:"cd_clinics" }],
+  },
+
+  builder: {
+    incubation: [{ ev:"hipo_application_round" }, { ev:"hipo_application_round_2" }, { ev:"hipo_application_round_3" }],
+    funding:    [{ ev:"hipo_application_round_2" }, { ev:"ingenuity_award_application" }, { note:"A shipped MVP is the strongest evidence you can bring to either of these. HiPo is stage-gated — you advance when the evidence is there." }],
+    experts:    [{ oh:"mvp_clinics" }, { adv:"general" }],
+    frameworks: [{ ev:"build_your_mvp_1_without_an" }, { ev:"build_your_mvp_2_think_like" }, { ev:"how_to_start_your_venture" }],
+    doing:      [{ ev:"build_your_mvp_1_without_an" }, { ev:"b2c_hackathon_concept_testin" }],
+    team:       [{ ev:"oct_pizza_and_pitch_oct_13th" }, { ev:"pizza_pitch" }],
+    network:    [{ community:true }],
+    validate:   [{ ev:"build_your_mvp_without_an_en" }, { ev:"build_your_mvp_1_without_an" }, { ev:"customer_discovery_101_b2b_b" }],
+  },
+
+  propeller: {
+    incubation: [{ ev:"hipo_application_round" }, { ev:"hipo_application_round_2" }, { ev:"hipo_application_round_3" }],
+    funding:    [{ ev:"pic_application_2027_round" }, { ev:"hipo_application_round_3" }, { adv:"general" }],
+    experts:    [{ oh:"pmf_clinics" }, { adv:"general" }],
+    frameworks: [{ ev:"getting_to_product_market_fi" }, { ev:"fundraising_101_workshop" }],
+    doing:      [{ oh:"pmf_clinics" }, { ev:"sundai_hackathon_4" }],
+    team:       [{ ev:"oct_pizza_and_pitch_oct_13th" }, { ev:"pizza_pitch" }],
+    network:    [{ community:true }],
+    validate:   [{ ev:"getting_to_product_market_fi" }, { oh:"pmf_clinics" }],
+  },
+
+  impact: {
+    incubation: [{ ev:"social_impact_fellowship_app" }, { ev:"hipo_application_round_2" }],
+    funding:    [{ ev:"social_impact_fellowship_app" }, { adv:"socialimpact" }],
+    experts:    [{ adv:"socialimpact" }, { oh:"cd_clinics" }],
+    frameworks: [{ ev:"customer_discovery_101_b2b_b" }, { ev:"getting_to_product_market_fi" }],
+    doing:      [{ ev:"b2c_hackathon_concept_testin" }, { ev:"sundai_hackathon_4" }],
+    team:       [{ ev:"oct_pizza_and_pitch_oct_13th" }, { ev:"pizza_pitch" }],
+    network:    [{ community:true }],
+    validate:   [{ ev:"customer_discovery_email_jou" }, { ev:"customer_discovery_101_b2b_b" }],
+  },
+};
+
+// Social impact founders asking about capital get SIFF and the social-impact
+// advisors — but only once they are past the exploring stage. SIFF expects
+// traction, so pointing a pre-idea founder at it would contradict the routing
+// rule that keeps them an Explorer in the first place. `personas` names who
+// the override applies to.
+const GOALS_SECTOR_OVERRIDE = {
+  socialimpact: {
+    funding: {
+      personas: ["validator","builder","propeller","impact"],
+      rows: [{ ev:"social_impact_fellowship_app" }, { adv:"socialimpact" }],
+    },
+  },
+};
+
 // ── RESOLVERS ─────────────────────────────────────────────────────
 // getSteps now reads three things off window, all set by the quiz before
 // it calls in: _QUIZ_SECTOR, _QUIZ_TIME, _QUIZ_FORMAT.
@@ -884,38 +1007,91 @@ function getOHs(persona, sector, resolvedSteps) {
   return matches.slice(0, 4);
 }
 
+// ── GOAL RESOLVER ───────────────────────────────────────────────────
+// Turns one GOALS_DATA row into something renderable. Returns null if the
+// referenced item is gone or inactive, so a deleted event fails quietly
+// rather than rendering a broken card.
+function resolveGoalRow(row, userFormat) {
+  const remoteOnly = userFormat === 'remote';
+  if (row.note)  return { kind:'note', text: row.note };
+  if (row.link) {
+    const url = LINKS[row.link];
+    return (url && url !== '#') ? { kind:'link', url:url } : null;
+  }
+  if (row.adv) {
+    const list = EXPERTS.filter(function(e){ return e.tags.indexOf(row.adv) !== -1; }).slice(0, 3);
+    return list.length ? { kind:'advisors', items:list } : null;
+  }
+  if (row.community) {
+    const list = EVENTS.filter(function(e){
+      return e.active && e.con === 'Community' && (!remoteOnly || e.format === 'REMOTE'); }).slice(0, 3);
+    return list.length ? { kind:'events', items:list } : null;
+  }
+  if (row.oh) {
+    const o = OHS.filter(function(x){ return x.id === row.oh && x.active; })[0];
+    if (!o) return null;
+    if (remoteOnly && o.format === 'INPERSON') return null;
+    return { kind:'oh', item:o };
+  }
+  if (row.ev) {
+    const e = EVENTS.filter(function(x){ return x.id === row.ev && x.active; })[0];
+    if (!e) return null;
+    if (remoteOnly && e.format !== 'REMOTE') return { kind:'event', item:e, offFormat:true };
+    return { kind:'event', item:e };
+  }
+  return null;
+}
+
+// getGoalPicks(persona, goal, sector, format)
+// What this founder gets for the success they named. Social impact founders
+// asking about capital get the SIFF answer whatever persona they landed on.
+function getGoalPicks(persona, goal, sector, userFormat) {
+  let rows = ((GOALS_DATA[persona] || {})[goal]) || [];
+  const ov = (GOALS_SECTOR_OVERRIDE[sector] || {})[goal];
+  if (ov && (!ov.personas || ov.personas.indexOf(persona) !== -1)) rows = ov.rows || ov;
+  const out = [];
+  rows.forEach(function(row){
+    const r = resolveGoalRow(row, userFormat);
+    if (r) out.push(r);
+  });
+  // A remote founder should never be left with only in-person cards and no
+  // explanation — keep them, flagged, rather than showing an empty section.
+  return out;
+}
+
+function getGoalMeta(goal) {
+  return GOALS.filter(function(g){ return g.key === goal; })[0] || null;
+}
+
 // ── PERSONA ROUTING (single source of truth) ────────────────────────
-// Used by founder_xp_generator.html (the founder-facing quiz) AND
-// the_bot.html (the staff Routing Desk) — both call this exact function,
-// so a staff member and a founder giving the same answers always land on
-// the same persona. Do not duplicate this logic elsewhere.
+// Used by index.html (the founder-facing quiz) AND the_bot.html (the staff
+// Routing Desk) — both call this exact function, so a staff member and a
+// founder giving the same answers always land on the same persona.
 //
-// This is a lookup table, not a weighted score. Every cell is a deliberate
-// decision you can read off the page, and no outcome is ever settled by an
-// accidental tie.
+// Q1 names the persona outright. There is no scoring, no tie-break, and no
+// question quietly overriding another.
 //
-//   Q2 goal = community  → Community First, at any stage. Wanting people,
-//                          a team, or inspiration IS the answer — it is not
-//                          a fallback for people who are short on time.
-//   Q4 sector = socialimpact, at test or propel stage → Impact Founder.
-//                          Not at explore stage: SIFF expects traction, so
-//                          a pre-idea impact founder starts as an Explorer
-//                          with impact-tagged events and advisors.
-//   Q1 stage  then decides the rest.
-//   Q3 time   never changes the persona. It shapes the plan — see getSteps.
-//
-//         goal→   feedback    milestones   funding     community
-//   explore       explorer    explorer     explorer    community
-//   test          validator   builder      builder     community
-//   propel        propeller   propeller    propeller   community
-//   (socialimpact at test/propel overrides the first three columns → impact)
+//   Q1 stage   community | explore | validate | build | propel
+//              → community | explorer | validator | builder | propeller
+//   Q4 sector  social impact past the exploring stage → Impact Founder.
+//              Not at explore stage: SIFF expects traction (300+ users, or
+//              partnerships, or funding, or IP), so a pre-idea impact founder
+//              starts as an Explorer with impact-tagged events and advisors.
+//   Q2 goal    picks the programming, never the persona — see getGoalPicks.
+//   Q3 time    shapes the plan, never the persona — see getSteps.
+//   Q5 format  filters the plan, never the persona — see getSteps/getEvents.
+
+const STAGE_TO_PERSONA = {
+  community: 'community',
+  explore:   'explorer',
+  validate:  'validator',
+  build:     'builder',
+  propel:    'propeller',
+};
 
 function calcPersonaFromAnswers(answers) {
-  const { stage, goal, sector } = answers;
-
-  if (goal === 'community') return 'community';
-  if (sector === 'socialimpact' && (stage === 'test' || stage === 'propel')) return 'impact';
-  if (stage === 'explore') return 'explorer';
-  if (stage === 'propel')  return 'propeller';
-  return goal === 'feedback' ? 'validator' : 'builder';
+  const { stage, sector } = answers;
+  const base = STAGE_TO_PERSONA[stage] || 'explorer';
+  if (sector === 'socialimpact' && base !== 'community' && base !== 'explorer') return 'impact';
+  return base;
 }
