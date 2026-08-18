@@ -21,22 +21,21 @@
 // ════════════════════════════════════════════════════════════════
 
 window.WF_ANALYTICS = {
-  // From your form's edit URL:
-  // docs.google.com/forms/d/e/  1FAIpQLSc...  /viewform
-  //                             ^^^^^^^^^^^ this bit
-  FORM_ID: '',
+  // Form: "Wayfinder telemetry". Blank FORM_ID out to switch all of this off.
+  FORM_ID: '1FAIpQLSeaAAS4rWyufjlD202KHsojV3f-EyAq54SgNgPOzCrwdr_bdg',
 
-  // Each question in the Google Form has an entry id. Paste them here.
+  // Entry ids, read off the form's pre-filled link. If you ever rebuild the
+  // form these all change — regenerate a pre-filled link and repaste.
   FIELDS: {
-    session: '',   // Session
-    event:   '',   // Event
-    stage:   '',   // Stage
-    goal:    '',   // Goal
-    time:    '',   // Time
-    sector:  '',   // Sector
-    format:  '',   // Format
-    persona: '',   // Persona
-    detail:  '',   // Detail
+    session: 'entry.1174331446',
+    event:   'entry.2057048025',
+    stage:   'entry.1759396148',
+    goal:    'entry.359808740',
+    time:    'entry.14638847',
+    sector:  'entry.742409',
+    format:  'entry.787662099',
+    persona: 'entry.953065052',
+    detail:  'entry.1211558482',
   },
 };
 
