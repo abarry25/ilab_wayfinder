@@ -21,7 +21,7 @@
 // ════════════════════════════════════════════════════════════════
 
 window.WF_ANALYTICS = {
-  // Form: "Wayfinder telemetry". Blank FORM_ID out to switch all of this off.
+  // Form: "wayfinder_ilab". Blank FORM_ID out to switch all of this off.
   FORM_ID: '1FAIpQLSeaAAS4rWyufjlD202KHsojV3f-EyAq54SgNgPOzCrwdr_bdg',
 
   // Entry ids, read off the form's pre-filled link. If you ever rebuild the
@@ -49,11 +49,18 @@ function _wfReady() {
 // Fire and forget. `no-cors` means we can't read the response, which is
 // fine — nothing here needs one. Any failure is swallowed on purpose:
 // telemetry must never be able to break the quiz.
+//
+// IMPORTANT — the body must be URLSearchParams, not FormData.
+// URLSearchParams sends application/x-www-form-urlencoded, which is what
+// Google Forms' formResponse endpoint accepts. FormData sends
+// multipart/form-data, which it silently rejects — and because this is a
+// no-cors request we never see the rejection. That exact mistake cost us
+// an afternoon of "why is the Sheet empty".
 function wfTrack(eventName, payload) {
   try {
     if (!_wfReady()) return;
     const data = Object.assign({ event: eventName, session: _wfSession }, payload || {});
-    const body = new FormData();
+    const body = new URLSearchParams();
     Object.keys(window.WF_ANALYTICS.FIELDS).forEach(function (k) {
       const field = window.WF_ANALYTICS.FIELDS[k];
       if (field && data[k] !== undefined && data[k] !== null && data[k] !== '') {
@@ -61,7 +68,8 @@ function wfTrack(eventName, payload) {
       }
     });
     fetch('https://docs.google.com/forms/d/e/' + window.WF_ANALYTICS.FORM_ID + '/formResponse',
-          { method: 'POST', mode: 'no-cors', body: body }).catch(function () {});
+          { method: 'POST', mode: 'no-cors', keepalive: true, body: body })
+      .catch(function () {});
   } catch (e) { /* never let telemetry break the page */ }
 }
 
